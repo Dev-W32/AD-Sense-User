@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { Typography, Box, Stack } from "@mui/material";
@@ -7,8 +7,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Loader } from "./";
 import { fetchFromAPI } from "../utils/fetchFromAPI";
 import ChatScreen from "./ChatScreen";
+import FaceDetector from "./FaceDetector";
 
 const VideoDetail = () => {
+  const videoRef = useRef();
   const [videoDetail, setVideoDetail] = useState(null);
   const [videos, setVideos] = useState(null);
   const { id } = useParams();
@@ -40,24 +42,24 @@ const VideoDetail = () => {
               className="react-player"
               controls
             />
-            <Typography color="#fff" variant="h5" fontWeight="bold" p={2}>
-              {title}
+            <Typography color="black" variant="h5" fontWeight="bold" p={2}>
+              {title} is there a title?
             </Typography>
             <Stack
               direction="row"
               justifyContent="space-between"
-              sx={{ color: "#fff" }}
+              sx={{ color: "black" }}
               py={1}
               px={2}
             >
               <Link to={`/channel/${channelId}`}>
                 <Typography
                   variant={{ sm: "subtitle1", md: "h6" }}
-                  color="#fff"
+                  color="black"
                 >
                   {channelTitle}
                   <CheckCircleIcon
-                    sx={{ fontSize: "12px", color: "gray", ml: "5px" }}
+                    sx={{ fontSize: "12px", color: "black", ml: "5px" }}
                   />
                 </Typography>
               </Link>
@@ -65,21 +67,34 @@ const VideoDetail = () => {
                 <Typography variant="body1" sx={{ opacity: 0.7 }}>
                   {parseInt(viewCount).toLocaleString()} views
                 </Typography>
-                <Typography variant="body1" sx={{ opacity: 0.7 }}>
+                <Typography variant="body1" sx={{ opacity: 1 }}>
                   {parseInt(likeCount).toLocaleString()} likes
                 </Typography>
+          
               </Stack>
+
+
+        
+
+
             </Stack>
+          <Stack>
+            <Typography color="black" variant="body2" p={2}>
+             
+            </Typography>
+          </Stack>
           </Box>
+         
         </Box>
         <div
           px={2}
           py={{ md: 1, xs: 5 }}
           justifyContent="center"
-          alignItems="center"
+       
         >
           <ChatScreen direction="column" />
         </div>
+    
       </Stack>
     </Box>
   );

@@ -1,5 +1,4 @@
-import React from "react";
-// import { Stack, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.css";
 import {
   MainContainer,
@@ -9,24 +8,21 @@ import {
   MessageInput,
   TypingIndicator,
 } from "@chatscope/chat-ui-kit-react";
-// import firebase from "firebase/compat/app";
-
 import { db } from "../config";
 
-// import { Loader } from "./";
-import { useState, useEffect } from "react";
+import FaceDetector from '../components/FaceDetector'
 
 const ChatScreen = ({ direction }) => {
-  const API_KEY = "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";
+  const API_KEY = "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";
   const [systemMessage, setSystemMessage] = useState({
     role: "system",
     content:
-      "As a brand ambassador, your job is to engage with users and help them enjoy while promoting the product. You can use games or quiz to make the conversation more interesting, but it's important to maintain the brand's character and avoid boring the user. Make sure each response is concise and includes some emojis to keep things fun. and  provide User with link.",
+      "As a brand ambassador for, your job is to engage with users and help them enjoy while promoting the product. You can use games or quiz to make the conversation more interesting, but it's important to maintain the brand's character and avoid boring the user. Make sure each response is concise and includes some emojis to keep things fun. and  provide User with link.",
   });
   const [messages, setMessages] = useState([
     {
       message:
-        "👋 Hi there! \nWelcome OnBoard! This is your AI Ambassador and I’m here to invite you to Play Games, Quizzes and have fun. 🎉 \nYou can win amazing rewards too! \nSo, let’s get started and have a blast together! 💥",
+        '👋 Hi there! \nWelcome OnBoard! This is your AI Ambassador and I’m here to invite you to Play Games, Quizzes and have fun. 🎉 \nYou can win amazing rewards too! \nSo, let’s get started and have a blast together! 💥\nJust Say " Lets\'s Start "',
       sender: "Ambassador",
     },
   ]);
@@ -40,16 +36,22 @@ const ChatScreen = ({ direction }) => {
         return;
       }
       const latestDocData = latestDocSnapshot.docs[0].data();
+      if (!latestDocData.formData) {
+        console.log("No formData property in latest document data.");
+        return;
+      }
       const { product, type, description, link, words } =
         latestDocData.formData;
       setSystemMessage({
         role: "system",
         content: `As a brand ambassador for ${product}, your product is ${description} and the keywords preferred for the product are ${words} your job is to engage with users and help them enjoy while promoting the product. You can use ${type} to make the conversation more interesting, but it's important to maintain the brand's character and avoid boring the user. Make sure each response is concise and includes some emojis to keep things fun. and at the last of the ${type} provide User with link: ${link} of the ${product} website`,
       });
-      setMessages({
-        message: `👋 Hi there! \nWelcome OnBoard! This is your ${product} Ambassador and I’m here to invite you for ${type} and have fun. 🎉 \nYou can win amazing rewards too! \nSo, let’s get started and have a blast together! 💥`,
-        sender: "Ambassador",
-      });
+      console.log("Latest document data:", latestDocData);
+
+      // setMessages({
+      //   message: `👋 Hi there! \nWelcome OnBoard! This is your ${product} Ambassador and I’m here to invite you for ${type} and have fun. 🎉 \nYou can win amazing rewards too! \nSo, let’s get started and have a blast together! 💥`,
+      //   sender: "Ambassador",
+      // });
     };
     fetchLatestData();
   }, []);
@@ -144,8 +146,12 @@ const ChatScreen = ({ direction }) => {
             })}
           </MessageList>
           <MessageInput placeholder="Play here" onSend={handleSend} />
+        
         </ChatContainer>
+
+        <FaceDetector/>
       </MainContainer>
+    
     </div>
   );
 };
