@@ -13,7 +13,7 @@ import { db } from "../config";
 import FaceDetector from '../components/FaceDetector'
 
 const ChatScreen = ({ direction }) => {
-  const API_KEY = "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";
+  const API_KEY =  process.env.REACT_APP_OPENAI_API_KEY;
   const [systemMessage, setSystemMessage] = useState({
     role: "system",
     content:
